@@ -43,6 +43,19 @@ stages:
       steps:
       - task: TerraformCLI@0
         inputs:
+          command: 'init'
+          workingDirectory: '$(Pipeline.Workspace)/terraformtest/aks_provision'
+          backendType: 'azurerm'
+          backendServiceArm: 'terraform-aks-svc'
+          backendAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
+          backendAzureRmResourceGroupName: 'terraform-tfstate-storage'
+          backendAzureRmStorageAccountName: 'tfstatestoragebatch5'
+          backendAzureRmContainerName: 'tfstate'
+          backendAzureRmKey: 'terraform.tfstate'
+          allowTelemetryCollection: false
+
+      - task: TerraformCLI@0
+        inputs:
           command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
           environmentServiceName: 'terraform-aks-svc'
