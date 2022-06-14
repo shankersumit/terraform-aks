@@ -44,7 +44,7 @@ stages:
       - task: TerraformCLI@0
         inputs:
           command: 'init'
-          workingDirectory: '$(Pipeline.Workspace)/terraformtest/aks_provision'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
           backendType: 'azurerm'
           backendServiceArm: 'terraform-aks-svc'
           backendAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
