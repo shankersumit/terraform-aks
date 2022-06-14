@@ -35,6 +35,3 @@ stages:
             command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform test/aks_provision'
             allowTelemetryCollection: false
-
-    
-       	
