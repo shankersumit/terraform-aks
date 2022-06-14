@@ -1,0 +1,40 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: TerraformValidate
+  jobs:
+    - job: TerraformValidateJob
+      continueOnError: false
+      displayName: Publish Artifacts
+      steps:
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(System.DefaultWorkingDirectory)/terraform test/aks_provision'
+            artifact: 'terraform-aks'
+            publishLocation: 'pipeline'
+        - task: TerraformCLI@0
+          displayName: Terraform init
+          inputs:
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform test/aks_provision'
+            backendType: 'azurerm'
+            backendServiceArm: 'terraform-aks-svc'
+            backendAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
+            backendAzureRmResourceGroupName: 'terraform-tfstate-storage'
+            backendAzureRmStorageAccountName: 'tfstatestoragebatch5'
+            backendAzureRmContainerName: 'tfstate'
+            backendAzureRmKey: 'terraform.tfstate'
+            allowTelemetryCollection: false
+        - task: TerraformCLI@0
+          displayName: Terraform Validate
+          inputs:
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform test/aks_provision'
+            allowTelemetryCollection: false
+
+    
+       	
