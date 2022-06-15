@@ -37,8 +37,8 @@ stages:
             allowTelemetryCollection: false
 - stage:
   jobs:
-    - deployment: 
-      displayName:
+    - deployment: deployakscluster
+      displayName: deployakscluster
       pool:
         vmImage: 'ubuntu-latest'
       strategy:
