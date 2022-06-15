@@ -39,6 +39,7 @@ stages:
   jobs:
     - deployment: deployakscluster
       displayName: deployakscluster
+      environment:
       pool:
         vmImage: 'ubuntu-latest'
       strategy:
