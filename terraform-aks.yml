@@ -35,31 +35,42 @@ stages:
             command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
             allowTelemetryCollection: false
-- stage: TerraformPlan
+- stage:
   jobs:
-    - job: TerraformPlanJob
-      continueOnError: false
-      displayName: Terraform Plan
-      steps:
-      - task: TerraformCLI@0
-        inputs:
-          command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
-          backendType: 'azurerm'
-          backendServiceArm: 'terraform-aks-svc'
-          backendAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-          backendAzureRmResourceGroupName: 'terraform-tfstate-storage'
-          backendAzureRmStorageAccountName: 'tfstatestoragebatch5'
-          backendAzureRmContainerName: 'tfstate'
-          backendAzureRmKey: 'terraform.tfstate'
-          allowTelemetryCollection: false
-
-      - task: TerraformCLI@0
-        inputs:
-          command: 'plan'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
-          environmentServiceName: 'terraform-aks-svc'
-          providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-          allowTelemetryCollection: false
-          publishPlanResults: 'TerraformPlanOut'
-          
+    - deployment: 
+      displayName:
+      pool:
+        vmImage: 'ubuntu-latest'
+      strategy:
+       runOnce:
+          deploy:
+             steps:
+              - task: TerraformCLI@0
+                displayName: Terraform Init
+                inputs:
+                    command: 'init'
+                    workingDirectory: '$(Pipeline.Workspace)/terraform-aks'
+                    backendType: 'azurerm'
+                    backendServiceArm: 'terraform-aks-svc'
+                    backendAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
+                    backendAzureRmResourceGroupName: 'terraform-tfstate-storage'
+                    backendAzureRmStorageAccountName: 'tfstatestoragebatch5'
+                    backendAzureRmContainerName: 'tfstate'
+                    backendAzureRmKey: 'terraform.tfstate'
+                    allowTelemetryCollection: false
+              - task: TerraformCLI@0
+                displayName: Terraform Plan
+                inputs:
+                  command: 'plan'
+                  workingDirectory: '$(Pipeline.Workspace)/terraform-aks'
+                  environmentServiceName: 'terraform-aks-svc'
+                  providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
+                  allowTelemetryCollection: false
+              - task: TerraformCLI@0
+                displayName: Terraform apply
+                inputs:
+                  command: 'apply'
+                  workingDirectory: '$(Pipeline.Workspace)/terraform-aks'
+                  environmentServiceName: 'terraform-aks-svc'
+                  providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
+                  allowTelemetryCollection: false
