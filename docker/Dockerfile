@@ -1,7 +1,4 @@
-FROM node:10
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 8080
-CMD [ "node", "index.js" ]
+FROM nginx:alpine
+
+COPY default.conf /etc/nginx/conf.d/
+COPY index.html /usr/share/nginx/html/
