@@ -66,7 +66,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
               environmentServiceName: 'terraform-aks-svc'
               providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-              commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform.tfplan'
+              commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform.tfplan -detailed-exitcode'
               allowTelemetryCollection: false
               publishPlanResults: 'PlanResults'
           - task: TerraformCLI@0
@@ -76,6 +76,8 @@ stages:
               allowTelemetryCollection: false
               inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/terraform.tfplan'
           - bash: |
+              echo "TERRAFORM_PLAN_HAS_CHANGES==$TERRAFORM_PLAN_HAS_CHANGES"
+              echo "TERRAFORM_PLAN_HAS_DESTROY_CHANGES===$TERRAFORM_PLAN_HAS_DESTROY_CHANGES"
               if [ "$TERRAFORM_PLAN_HAS_CHANGES" = true ] && [ "$TERRAFORM_PLAN_HAS_DESTROY_CHANGES" = false ] ; then
                 echo "##vso[task.setvariable variable=HAS_CHANGES_ONLY;isOutput=true]true"
                 echo "##vso[task.logissue type=warning]Changes with no destroys detected, it is safe for the pipeline to proceed automatically"
