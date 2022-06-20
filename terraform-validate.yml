@@ -34,6 +34,11 @@ stages:
               backendAzureRmContainerName: 'tfstate'
               backendAzureRmKey: 'terraform.tfstate'
               allowTelemetryCollection: false
+          - task: TerraformCLI@0
+            inputs:
+              command: 'validate'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
+              allowTelemetryCollection: false
   - stage: plan_terraform
     displayName: terraform plan
     dependsOn:
@@ -75,8 +80,6 @@ stages:
               allowTelemetryCollection: false
               inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/terraform1.json'
           - bash: |
-              echo "TERRAFORM_PLAN_HAS_CHANGES==$TERRAFORM_PLAN_HAS_CHANGES"
-              echo "TERRAFORM_PLAN_HAS_DESTROY_CHANGES===$TERRAFORM_PLAN_HAS_DESTROY_CHANGES"
               if [ "$TERRAFORM_PLAN_HAS_CHANGES" = true ] && [ "$TERRAFORM_PLAN_HAS_DESTROY_CHANGES" = false ] ; then
                 echo "##vso[task.setvariable variable=HAS_CHANGES_ONLY;isOutput=true]true"
                 echo "##vso[task.logissue type=warning]Changes with no destroys detected, it is safe for the pipeline to proceed automatically"
