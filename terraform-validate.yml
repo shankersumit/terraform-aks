@@ -50,7 +50,7 @@ stages:
           - task: TerraformInstaller@0
             displayName: Install Terraform
             inputs:
-              terraformVersion: 'latest'
+              terraformVersion: 0.14.3
           - task: TerraformCLI@0
             displayName: Terraform Init
             inputs:
@@ -70,7 +70,7 @@ stages:
             inputs:
               command: 'plan'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
-              commandOptions: '-out=$(System.DefaultWorkingDirectory)/tf -detailed-exitcode'
+              commandOptions: '-out=$(System.DefaultWorkingDirectory)/tf.tfplan -detailed-exitcode'
               allowTelemetryCollection: false
               publishPlanResults: 'aksplan'
           - task: TerraformCLI@0
@@ -78,7 +78,7 @@ stages:
             inputs:
               command: 'show'
               allowTelemetryCollection: false
-              inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/tf'
+              inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/tf.tfplan'
           - bash: |
               if [ "$TERRAFORM_PLAN_HAS_CHANGES" = true ] && [ "$TERRAFORM_PLAN_HAS_DESTROY_CHANGES" = false ] ; then
                 echo "##vso[task.setvariable variable=HAS_CHANGES_ONLY;isOutput=true]true"
