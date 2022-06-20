@@ -5,7 +5,7 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-  - stage: Publish artifact and terraform validate
+  - stage: Publish_artifact
     jobs:
       - job:
         displayName: publish artifact to pipeline workspace and validate the terraform manifest
