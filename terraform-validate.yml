@@ -64,7 +64,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
               environmentServiceName: 'terraform-aks-svc'
               providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-              commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform.tfplan -detailed-exitcode'
+              commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform.tfplan'
               allowTelemetryCollection: false
               publishPlanResults: 'terraform.tfplan'
           - task: TerraformCLI@0
