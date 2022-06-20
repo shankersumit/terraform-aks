@@ -92,6 +92,10 @@ stages:
             displayName: "Vars > Set Variables for next stage"
   - stage: "autoTerraform"
     displayName: "Terraform - Auto Approval"
+    pool:
+      name: Default
+      demands:
+        - agent.name -equals selfhostedwindowsagent
     dependsOn:
       - "plan_terraform"
     condition: |
@@ -103,6 +107,8 @@ stages:
     jobs:
       - job: "TerraformAuto"
         displayName: "Terraform > install, init & apply"
+        pool:
+         name: 
         steps:
           - task: TerraformInstaller@0
             displayName: Install terraform
@@ -142,7 +148,10 @@ stages:
     jobs:
       - job: "waitForValidation"
         displayName: "Wait > Wait for manual appoval"
-        pool: "server"
+        pool:
+          name: Default
+          demands:
+            - agent.name -equals selfhostedwindowsagent
         timeoutInMinutes: 4320 # job times out in 3 days
         steps:
           - task: ManualValidation@0
