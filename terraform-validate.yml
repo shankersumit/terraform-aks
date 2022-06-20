@@ -37,7 +37,7 @@ stages:
     jobs:
       - deployment: 
         displayName: Terraform Validate
-        environment: deploy-aks
+        environment: deployaks
         continueOnError: false
         strategy:
          runOnce:
