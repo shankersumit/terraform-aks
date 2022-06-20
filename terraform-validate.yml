@@ -41,8 +41,8 @@ stages:
   #             allowTelemetryCollection: false
   - stage: plan_terraform
     displayName: terraform plan
-    dependsOn:
-       - "validate_terraform"
+    # dependsOn:
+    #    - "validate_terraform"
     jobs:
       - job: "terraformjobs"
         displayName: "Terraform > Install Init Plan"
