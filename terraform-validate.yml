@@ -68,7 +68,7 @@ stages:
               providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
               commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform.tfplan'
               allowTelemetryCollection: false
-              publishPlanResults: 'terraform.tfplan'
+              publishPlanResults: 'PlanResults'
           - task: TerraformCLI@0
             displayName: Terraform show
             inputs:
