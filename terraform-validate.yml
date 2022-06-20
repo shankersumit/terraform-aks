@@ -36,7 +36,7 @@ stages:
   - stage: Deploy
     jobs:
       - deployment: 
-        displayName: Terraform Validate
+        displayName: Terraform Deploy
         environment: deployaks
         continueOnError: false
         strategy:
@@ -57,6 +57,7 @@ stages:
                     backendAzureRmKey: 'terraform.tfstate'
                     allowTelemetryCollection: false
                 - task: TerraformCLI@0
+                  displayName: Terraform Plan
                   inputs:
                     command: 'plan'
                     workingDirectory: '$(Pipeline.Workspace)/terraformaks'
@@ -65,3 +66,4 @@ stages:
                     commandOptions: '-out aksplan-$(Build.BuildId).out'
                     allowTelemetryCollection: false
                     publishPlanResults: 'aksplan'
+                
