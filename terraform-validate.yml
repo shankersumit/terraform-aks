@@ -130,7 +130,7 @@ stages:
   - stage: "approveTerraform"
     displayName: "Terraform - Manual Approval"
     dependsOn:
-      - "planTerraform"
+      - "plan_terraform"
     condition: |
       and
         (
