@@ -59,16 +59,15 @@ stages:
               backendAzureRmContainerName: 'tfstate'
               backendAzureRmKey: 'terraform.tfstate'
               allowTelemetryCollection: false
+
           - task: TerraformCLI@0
-            displayName: Terraform Plan
+            displayName: Terraform plan
             inputs:
               command: 'plan'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
-              environmentServiceName: 'terraform-aks-svc'
-              providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-              commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform1.json -detailed-exitcode'
+              commandOptions: '-out=$(System.DefaultWorkingDirectory)/tf.tfplan -detailed-exitcode'
               allowTelemetryCollection: false
-              publishPlanResults: 'PlanResults'
+              publishPlanResults: 'aksplan'
           - task: TerraformCLI@0
             displayName: Terraform show
             inputs:
