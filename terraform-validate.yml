@@ -66,7 +66,7 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
               environmentServiceName: 'terraform-aks-svc'
               providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-              commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform.tfplan -detailed-exitcode'
+              commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform1.json -detailed-exitcode'
               allowTelemetryCollection: false
               publishPlanResults: 'PlanResults'
           - task: TerraformCLI@0
@@ -74,7 +74,7 @@ stages:
             inputs:
               command: 'show'
               allowTelemetryCollection: false
-              inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/terraform.tfplan'
+              inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/terraform1.json'
           - bash: |
               echo "TERRAFORM_PLAN_HAS_CHANGES==$TERRAFORM_PLAN_HAS_CHANGES"
               echo "TERRAFORM_PLAN_HAS_DESTROY_CHANGES===$TERRAFORM_PLAN_HAS_DESTROY_CHANGES"
