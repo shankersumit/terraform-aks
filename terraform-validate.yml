@@ -6,39 +6,39 @@ pool:
    - agent.name -equals selfhostedwindowsagent
 
 stages:
-  - stage: validate_terraform
-    jobs:
-      - job:
-        displayName: publish artifact to pipeline workspace and validate the terraform manifest
-        steps:
-          -  task: PublishPipelineArtifact@1
-             displayName: Publish artifact
-             inputs:
-              targetPath: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
-              artifact: 'terraformaks'
-              publishLocation: 'pipeline'
-          - task: TerraformInstaller@0
-            displayName: Install terraform
-            inputs:
-              terraformVersion: 'latest'
-          - task: TerraformCLI@0
-            displayName: Terraform Init
-            inputs:
-              command: 'init'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
-              backendType: 'azurerm'
-              backendServiceArm: 'terraform-aks-svc'
-              backendAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-              backendAzureRmResourceGroupName: 'terraform-tfstate-storage'
-              backendAzureRmStorageAccountName: 'tfstatestoragebatch5'
-              backendAzureRmContainerName: 'tfstate'
-              backendAzureRmKey: 'terraform.tfstate'
-              allowTelemetryCollection: false
-          - task: TerraformCLI@0
-            inputs:
-              command: 'validate'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
-              allowTelemetryCollection: false
+  # - stage: validate_terraform
+  #   jobs:
+  #     - job:
+  #       displayName: publish artifact to pipeline workspace and validate the terraform manifest
+  #       steps:
+  #         -  task: PublishPipelineArtifact@1
+  #            displayName: Publish artifact
+  #            inputs:
+  #             targetPath: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
+  #             artifact: 'terraformaks'
+  #             publishLocation: 'pipeline'
+  #         - task: TerraformInstaller@0
+  #           displayName: Install terraform
+  #           inputs:
+  #             terraformVersion: 'latest'
+  #         - task: TerraformCLI@0
+  #           displayName: Terraform Init
+  #           inputs:
+  #             command: 'init'
+  #             workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
+  #             backendType: 'azurerm'
+  #             backendServiceArm: 'terraform-aks-svc'
+  #             backendAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
+  #             backendAzureRmResourceGroupName: 'terraform-tfstate-storage'
+  #             backendAzureRmStorageAccountName: 'tfstatestoragebatch5'
+  #             backendAzureRmContainerName: 'tfstate'
+  #             backendAzureRmKey: 'terraform.tfstate'
+  #             allowTelemetryCollection: false
+  #         - task: TerraformCLI@0
+  #           inputs:
+  #             command: 'validate'
+  #             workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
+  #             allowTelemetryCollection: false
   - stage: plan_terraform
     displayName: terraform plan
     dependsOn:
@@ -70,7 +70,7 @@ stages:
             inputs:
               command: 'plan'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
-              commandOptions: '-out=$(System.DefaultWorkingDirectory)/tf.tfplan -detailed-exitcode'
+              commandOptions: '-out=$(System.DefaultWorkingDirectory)/tf -detailed-exitcode'
               allowTelemetryCollection: false
               publishPlanResults: 'aksplan'
           - task: TerraformCLI@0
@@ -78,7 +78,7 @@ stages:
             inputs:
               command: 'show'
               allowTelemetryCollection: false
-              inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/tf.tfplan'
+              inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/tf'
           - bash: |
               if [ "$TERRAFORM_PLAN_HAS_CHANGES" = true ] && [ "$TERRAFORM_PLAN_HAS_DESTROY_CHANGES" = false ] ; then
                 echo "##vso[task.setvariable variable=HAS_CHANGES_ONLY;isOutput=true]true"
