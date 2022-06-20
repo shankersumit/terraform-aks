@@ -11,11 +11,13 @@ stages:
         displayName: publish artifact to pipeline workspace and validate the terraform manifest
         steps:
           -  task: PublishPipelineArtifact@1
+             displayName: Publish artifact
              inputs:
               targetPath: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
               artifact: 'terraformaks'
               publishLocation: 'pipeline'
           - task: TerraformInstaller@0
+            displayName: Install terraform
             inputs:
               terraformVersion: 'latest'
           - task: TerraformCLI@0
