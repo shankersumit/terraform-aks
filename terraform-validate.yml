@@ -34,7 +34,7 @@ stages:
               allowTelemetryCollection: false
   - stage: Deploy
     jobs:
-      - deployment: 
+      - deployment: Terraform Plan
         displayName: Terraform Deploy
         continueOnError: false
         strategy:
@@ -64,7 +64,8 @@ stages:
                     commandOptions: '-out aksplan-$(Build.BuildId).out'
                     allowTelemetryCollection: false
                     publishPlanResults: 'aksplan'
-      - deployment:
+      - deployment: 
+        displayName: Terraform Apply
         environment: deployaks
         strategy:
           runOnce:
