@@ -73,4 +73,3 @@ stages:
               command: 'show'
               allowTelemetryCollection: false
               inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/terraform.tfplan'
-          
