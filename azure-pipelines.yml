@@ -17,7 +17,7 @@ stages:
       pool:
         vmImage: 'Ubuntu-latest'
       # creates an environment if it doesn't exist
-      environment: 'smarthotel-dev'
+      environment: 'deployaks'
       strategy:
         runOnce:
           deploy:
