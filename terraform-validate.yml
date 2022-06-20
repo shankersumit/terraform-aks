@@ -19,6 +19,7 @@ stages:
             inputs:
               terraformVersion: 'latest'
           - task: TerraformCLI@0
+            displayName: Terraform Init
             inputs:
               command: 'init'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
@@ -31,6 +32,7 @@ stages:
               backendAzureRmKey: 'terraform.tfstate'
               allowTelemetryCollection: false
           - task: TerraformCLI@0
+            displayName: Terraform Validate
             inputs:
               command: 'validate'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
