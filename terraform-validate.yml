@@ -34,7 +34,7 @@ stages:
               allowTelemetryCollection: false
   - stage: Deploy
     jobs:
-      - deployment: Terraform Plan
+      - deployment: Terraform_Plan
         displayName: Terraform Deploy
         continueOnError: false
         strategy:
