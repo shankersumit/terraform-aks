@@ -33,9 +33,17 @@ stages:
               backendAzureRmContainerName: 'tfstate'
               backendAzureRmKey: 'terraform.tfstate'
               allowTelemetryCollection: false
-          - task: TerraformCLI@0
-            displayName: Terraform Validate
-            inputs:
-              command: 'validate'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
-              allowTelemetryCollection: false
+      - deployment: 
+        displayName: Terraform Validate
+        environment: deploy-aks
+        continueOnError: false
+        strategy:
+         runOnce:
+           deploy:
+              steps:
+                - task: TerraformCLI@0
+                  displayName: Terraform Validate
+                  inputs:
+                    command: 'validate'
+                    workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
+                    allowTelemetryCollection: false
