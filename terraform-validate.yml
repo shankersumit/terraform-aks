@@ -4,7 +4,7 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-  - stage: Publish_artifact
+  - stage: validate_terraform
     jobs:
       - job:
         displayName: publish artifact to pipeline workspace and validate the terraform manifest
@@ -32,52 +32,43 @@ stages:
               backendAzureRmContainerName: 'tfstate'
               backendAzureRmKey: 'terraform.tfstate'
               allowTelemetryCollection: false
-  - stage: Deploy
+  - stage: plan_terraform
+    displayName: terraform plan
     jobs:
-      - deployment: Terraform_Plan
-        displayName: Terraform Deploy
-        environment: terraformplan
-        continueOnError: false
-        strategy:
-         runOnce:
-           deploy:
-              steps:
-                - task: TerraformCLI@0
-                  displayName: Terraform Init
-                  inputs:
-                    command: 'init'
-                    workingDirectory: '$(Pipeline.Workspace)/terraformaks'
-                    backendType: 'azurerm'
-                    backendServiceArm: 'terraform-aks-svc'
-                    backendAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-                    backendAzureRmResourceGroupName: 'terraform-tfstate-storage'
-                    backendAzureRmStorageAccountName: 'tfstatestoragebatch5'
-                    backendAzureRmContainerName: 'tfstate'
-                    backendAzureRmKey: 'terraform.tfstate'
-                    allowTelemetryCollection: false
-                - task: TerraformCLI@0
-                  displayName: Terraform Plan
-                  inputs:
-                    command: 'plan'
-                    workingDirectory: '$(Pipeline.Workspace)/terraformaks'
-                    environmentServiceName: 'terraform-aks-svc'
-                    providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-                    commandOptions: '-out aksplan-$(Build.BuildId).out'
-                    allowTelemetryCollection: false
-                    publishPlanResults: 'aksplan'
-      - deployment: 
-        displayName: Terraform Apply
-        environment: deployaks
-        strategy:
-          runOnce:
-             deploy:
-                steps:
-                  - task: TerraformCLI@0
-                    displayName: Terraform apply
-                    inputs:
-                      command: 'apply'
-                      workingDirectory: '$(Pipeline.Workspace)/terraformaks'
-                      environmentServiceName: 'terraform-aks-svc'
-                      providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-                      commandOptions: '$(Pipeline.Workspace)/terraformaks/aksplan-$(Build.BuildId).out'
-                      allowTelemetryCollection: false
+      - job: "terraformjobs"
+        displayName: "Terraform > Install Init Plan"
+        dependsOn:
+          - "validate_terraform"
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: 'latest'
+          - task: TerraformCLI@0
+            inputs:
+              command: 'init'
+              workingDirectory: '$(Pipeline.Workspace)/terraformtest/aks_provision'
+              backendType: 'azurerm'
+              backendServiceArm: 'terraform-aks-svc'
+              backendAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
+              backendAzureRmResourceGroupName: 'terraform-tfstate-storage'
+              backendAzureRmStorageAccountName: 'tfstatestoragebatch5'
+              backendAzureRmContainerName: 'tfstate'
+              backendAzureRmKey: 'terraform.tfstate'
+              allowTelemetryCollection: false
+          - task: TerraformCLI@0
+            displayName: Terraform Plan
+            inputs:
+              command: 'plan'
+              workingDirectory: '$(Pipeline.Workspace)/terraformaks'
+              environmentServiceName: 'terraform-aks-svc'
+              providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
+              commandOptions: '-out=$(Pipeline.Workspace)/terraformaks/terraform.tfplan -detailed-exitcode'
+              allowTelemetryCollection: false
+              publishPlanResults: 'terraform.tfplan'
+          - task: TerraformCLI@0
+            displayName: Terraform show
+            inputs:
+              command: 'show'
+              workingDirectory: 
+              allowTelemetryCollection: false
+              inputTargetPlanOrStateFilePath: '$(Pipeline.Workspace)/terraformaks/terraform.tfplan'
