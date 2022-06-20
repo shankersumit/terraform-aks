@@ -102,12 +102,7 @@ stages:
         )      
     jobs:
       - job: "TerraformAuto"
-        displayName: "Terraform > install, init & apply"
-        pool:
-         name: Default
-         demands:
-           - agent.name -equals selfhostedwindowsagent
-             
+        displayName: "Terraform > install, init & apply"             
         steps:
           - task: TerraformInstaller@0
             displayName: Install terraform
@@ -148,10 +143,6 @@ stages:
     jobs:
       - job: "waitForValidation"
         displayName: "Wait > Wait for manual appoval"
-        pool:
-          name: Default
-          demands:
-            - agent.name -equals selfhostedwindowsagent
         timeoutInMinutes: 4320 # job times out in 3 days
         steps:
           - task: ManualValidation@0
