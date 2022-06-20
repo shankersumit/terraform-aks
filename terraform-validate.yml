@@ -71,6 +71,6 @@ stages:
             displayName: Terraform show
             inputs:
               command: 'show'
-              workingDirectory: '$(System.DefaultWorkingDirectory)'
               allowTelemetryCollection: false
               inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/terraform.tfplan'
+          
