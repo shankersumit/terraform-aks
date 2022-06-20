@@ -34,11 +34,11 @@ stages:
               allowTelemetryCollection: false
   - stage: plan_terraform
     displayName: terraform plan
+    dependsOn:
+       - "validate_terraform"
     jobs:
       - job: "terraformjobs"
         displayName: "Terraform > Install Init Plan"
-        dependsOn:
-          - "validate_terraform"
         steps:
           - task: TerraformInstaller@0
             inputs:
