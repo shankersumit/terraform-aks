@@ -71,7 +71,7 @@ stages:
              deploy:
                 steps:
                   - task: TerraformCLI@0
-                    displayName: Terraform appy
+                    displayName: Terraform apply
                     inputs:
                       command: 'apply'
                       workingDirectory: '$(Pipeline.Workspace)/terraformaks'
