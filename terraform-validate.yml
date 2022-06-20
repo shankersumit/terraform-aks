@@ -33,5 +33,5 @@ stages:
           - task: TerraformCLI@0
             inputs:
               command: 'validate'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-aks'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
               allowTelemetryCollection: false
