@@ -92,10 +92,6 @@ stages:
             displayName: "Vars > Set Variables for next stage"
   - stage: "autoTerraform"
     displayName: "Terraform - Auto Approval"
-    pool:
-      name: Default
-      demands:
-        - agent.name -equals selfhostedwindowsagent
     dependsOn:
       - "plan_terraform"
     condition: |
@@ -108,7 +104,10 @@ stages:
       - job: "TerraformAuto"
         displayName: "Terraform > install, init & apply"
         pool:
-         name: 
+         name: Default
+         demands:
+           - agent.name -equals selfhostedwindowsagent
+             
         steps:
           - task: TerraformInstaller@0
             displayName: Install terraform
