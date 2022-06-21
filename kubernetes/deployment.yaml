@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nodejs
-        image: aksregistryvipko.azurecr.io/aksimage:v1
+        image: aksregistryzjv3l.azurecr.io/customnginximage:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
