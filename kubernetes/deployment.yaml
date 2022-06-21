@@ -3,20 +3,20 @@ kind: Deployment
 metadata:
   name: aks-deployment
   labels:
-    app: nodejs
+    app: nginx
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nodejs
+      app: nginx
   template:
     metadata:
       labels:
-        app: nodejs
+        app: nginx
     spec:
       containers:
-      - name: nodejs
+      - name: nginx
         image: aksregistryzjv3l.azurecr.io/customnginximage:v1
         imagePullPolicy: Always
         ports:
-        - containerPort: 8080
+        - containerPort: 80
