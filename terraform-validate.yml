@@ -74,12 +74,6 @@ stages:
               allowTelemetryCollection: false
               publishPlanResults: 'aksplan'
           - task: TerraformCLI@0
-            displayName: Terraform show
-            inputs:
-              command: 'show'
-              allowTelemetryCollection: false
-              inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/tfplan'
-          - task: TerraformCLI@0
             displayName: terraform show
             inputs:
               command: 'show'
