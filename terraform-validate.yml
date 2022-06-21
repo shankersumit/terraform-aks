@@ -73,13 +73,12 @@ stages:
               commandOptions: '-out=$(System.DefaultWorkingDirectory)/tfplan.out -detailed-exitcode'
               allowTelemetryCollection: false
               publishPlanResults: 'aksplan'
-          # - task: TerraformCLI@0
-          #   displayName: terraform show
-          #   inputs:
-          #     command: 'show'
-          #     commandOptions: '-json=$(System.DefaultWorkingDirectory)/tfplan.out'
-          #     allowTelemetryCollection: false
-          #     inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/tfplan.out'
+          - task: TerraformCLI@0
+            displayName: terraform show
+            inputs:
+              command: 'show'
+              allowTelemetryCollection: false
+              inputTargetPlanOrStateFilePath: '$(System.DefaultWorkingDirectory)/tfplan.out'
           
           - bash: |
               if [ "$TERRAFORM_PLAN_HAS_CHANGES" = true ] && [ "$TERRAFORM_PLAN_HAS_DESTROY_CHANGES" = false ] ; then
