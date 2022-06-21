@@ -3,7 +3,7 @@ trigger: none
 pool:
   name: Default
   demands:
-   - agent.name -equals selfhostedwindowsagent
+   - agent.name -equals EPINGUGW023A
 
 stages:
   # - stage: validate_terraform
