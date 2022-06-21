@@ -176,5 +176,4 @@ stages:
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
               environmentServiceName: 'terraform-aks-svc'
               providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
-              commandOptions: '$(System.DefaultWorkingDirectory)/tfplan.out'
               allowTelemetryCollection: false
