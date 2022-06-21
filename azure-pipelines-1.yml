@@ -35,6 +35,7 @@ stages:
               backendAzureRmKey: 'terraform.tfstate'
               allowTelemetryCollection: false
           - task: TerraformCLI@0
+            displayName: Terraform validate
             inputs:
               command: 'validate'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
@@ -162,10 +163,18 @@ stages:
               backendAzureRmKey: 'terraform.tfstate'
               allowTelemetryCollection: false
 
+          # - task: TerraformCLI@0
+          #   inputs:
+          #     command: 'apply'
+          #     workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
+          #     environmentServiceName: 'terraform-aks-svc'
+          #     providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
+          #     allowTelemetryCollection: false
           - task: TerraformCLI@0
             inputs:
               command: 'apply'
               workingDirectory: '$(System.DefaultWorkingDirectory)/terraformtest/aks_provision'
               environmentServiceName: 'terraform-aks-svc'
               providerAzureRmSubscriptionId: '01a0d38e-38ad-442e-be3f-ad1e760bd4f5'
+              commandOptions: '$(System.DefaultWorkingDirectory)/tfplan.out'
               allowTelemetryCollection: false
